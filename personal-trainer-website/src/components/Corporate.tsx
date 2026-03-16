@@ -1,4 +1,42 @@
-import { Building2, TrendingUp, Users, Clock, Shield, BarChart3 } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Building2, TrendingUp, Users, Clock, Shield, BarChart3, CheckCircle2 } from 'lucide-react';
+
+// Simple animated counter for ROI stats
+function AnimatedStat({ value, suffix, prefix = '', label }: {
+  value: number; suffix: string; prefix?: string; label: string;
+}) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started.current) {
+        started.current = true;
+        let current = 0;
+        const step = value / 60;
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= value) { setCount(value); clearInterval(timer); }
+          else setCount(Math.floor(current));
+        }, 25);
+      }
+    }, { threshold: 0.5 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [value]);
+
+  return (
+    <div ref={ref} className="text-center p-6 bg-brand-gray border border-brand-gray-mid hover:border-brand-gold/30 transition-colors">
+      <div className="font-display text-4xl md:text-5xl font-bold text-brand-gold tabular-nums">
+        {prefix}{count}{suffix}
+      </div>
+      <div className="text-xs text-brand-muted uppercase tracking-widest font-sans mt-2 leading-tight">{label}</div>
+    </div>
+  );
+}
 
 const benefits = [
   {
@@ -29,8 +67,15 @@ const benefits = [
   {
     icon: Building2,
     title: 'Flexible Delivery',
-    desc: 'On-site, virtual, or hybrid — we adapt our programs to your workplace, schedule, and team size.',
+    desc: 'On-site, virtual, or hybrid — we adapt programs to your workplace, schedule, and team size.',
   },
+];
+
+const roiStats = [
+  { value: 21, suffix: '%', label: 'Productivity Increase' },
+  { value: 27, suffix: '%', label: 'Fewer Sick Days' },
+  { value: 6, suffix: 'x', prefix: '$', label: 'ROI Per Dollar Spent' },
+  { value: 28, suffix: '%', label: 'Lower Turnover' },
 ];
 
 const packages = [
@@ -80,25 +125,35 @@ export default function Corporate() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-brand-gold text-xs uppercase tracking-[0.3em] font-sans mb-4">
-            For Organizations
-          </p>
+        <div className="text-center mb-16 reveal">
+          <p className="text-brand-gold text-xs uppercase tracking-[0.3em] font-sans mb-4">For Organizations</p>
           <h2 className="section-heading text-brand-text">
             Corporate <span className="text-brand-gold">Wellness</span>
           </h2>
           <span className="gold-line mx-auto" />
-          <p className="text-brand-muted max-w-2xl mx-auto mt-2 font-sans leading-relaxed">
+          <p className="text-brand-muted max-w-2xl mx-auto mt-2 font-sans leading-relaxed text-sm">
             A healthy workforce is your greatest competitive advantage. We partner with Atlanta-area businesses
-            to design wellness programs that drive real results for your employees and your bottom line.
+            to design wellness programs that drive real results for employees and your bottom line.
           </p>
         </div>
 
+        {/* ROI Stats Bar */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16 reveal">
+          {roiStats.map((s) => (
+            <AnimatedStat key={s.label} {...s} />
+          ))}
+        </div>
+
         {/* Benefits Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-20">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-20 reveal">
           {benefits.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="bg-brand-gray border border-brand-gray-mid p-6 group hover:border-brand-gold/40 transition-all duration-300">
-              <Icon size={20} className="text-brand-gold mb-3" />
+            <div
+              key={title}
+              className="bg-brand-gray border border-brand-gray-mid p-6 group hover:border-brand-gold/40 transition-all duration-300"
+            >
+              <div className="w-10 h-10 bg-brand-gold/10 border border-brand-gold/30 flex items-center justify-center mb-4 group-hover:bg-brand-gold/20 transition-colors">
+                <Icon size={18} className="text-brand-gold" />
+              </div>
               <h3 className="font-display text-base font-bold uppercase tracking-wide text-brand-text mb-2">{title}</h3>
               <p className="text-brand-muted font-sans text-sm leading-relaxed">{desc}</p>
             </div>
@@ -106,7 +161,7 @@ export default function Corporate() {
         </div>
 
         {/* Packages */}
-        <div>
+        <div className="reveal">
           <h3 className="font-display text-3xl font-bold uppercase tracking-wider text-center text-brand-text mb-10">
             Wellness <span className="text-brand-gold">Packages</span>
           </h3>
@@ -116,13 +171,13 @@ export default function Corporate() {
                 key={name}
                 className={`relative border p-8 transition-all duration-300
                   ${featured
-                    ? 'bg-brand-gold/5 border-brand-gold'
+                    ? 'bg-brand-gold/5 border-brand-gold shadow-lg shadow-brand-gold/10'
                     : 'bg-brand-gray border-brand-gray-mid hover:border-brand-gold/40'
                   }`}
               >
                 {featured && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-gold text-brand-black text-[10px] font-display font-bold uppercase tracking-widest px-4 py-1">
-                    Recommended
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-gold text-brand-black text-[10px] font-display font-bold uppercase tracking-widest px-4 py-1 whitespace-nowrap">
+                    Most Popular
                   </div>
                 )}
 
@@ -136,7 +191,7 @@ export default function Corporate() {
                 <ul className="space-y-3 mb-8">
                   {features.map((f) => (
                     <li key={f} className="flex items-start gap-3 text-sm text-brand-muted font-sans">
-                      <span className="w-1.5 h-1.5 rounded-full bg-brand-gold mt-1.5 flex-shrink-0" />
+                      <CheckCircle2 size={14} className="text-brand-gold flex-shrink-0 mt-0.5" />
                       {f}
                     </li>
                   ))}

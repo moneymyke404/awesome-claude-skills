@@ -5,8 +5,10 @@ import About from './components/About';
 import Services from './components/Services';
 import Transformations from './components/Transformations';
 import Corporate from './components/Corporate';
+import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import { ScrollProgress, FloatingCTA } from './components/FloatingUI';
 
 function useRevealOnScroll() {
   useEffect(() => {
@@ -18,10 +20,10 @@ function useRevealOnScroll() {
           }
         });
       },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
     );
 
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 }
@@ -31,6 +33,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-brand-black">
+      <ScrollProgress />
+      <FloatingCTA />
       <Navbar />
       <main>
         <Hero />
@@ -38,6 +42,7 @@ export default function App() {
         <Services />
         <Transformations />
         <Corporate />
+        <FAQ />
         <Contact />
       </main>
       <Footer />
