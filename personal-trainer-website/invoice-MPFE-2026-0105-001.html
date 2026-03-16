@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoice MPFE-2026-0105-001 — MP Financial Enterprises</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 13px;
+      color: #1a1a1a;
+      background: #f0f0f0;
+      padding: 40px 20px;
+    }
+
+    .page {
+      background: #ffffff;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 56px 60px 60px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 40px;
+    }
+
+    .from-block h2 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .from-block p {
+      color: #555;
+      line-height: 1.7;
+      font-size: 12.5px;
+    }
+
+    .invoice-meta {
+      text-align: right;
+    }
+
+    .invoice-meta .invoice-title {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #111;
+      margin-bottom: 14px;
+    }
+
+    .invoice-meta table {
+      margin-left: auto;
+      border-collapse: collapse;
+    }
+
+    .invoice-meta td {
+      padding: 2px 0 2px 16px;
+      font-size: 12.5px;
+      color: #444;
+    }
+
+    .invoice-meta td:first-child {
+      font-weight: 600;
+      color: #111;
+      text-align: right;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1.5px solid #e0e0e0;
+      margin: 28px 0;
+    }
+
+    /* ── Bill-to ── */
+    .bill-to {
+      margin-bottom: 36px;
+    }
+
+    .bill-to p {
+      line-height: 1.7;
+      font-size: 12.5px;
+      color: #444;
+    }
+
+    .bill-to .label {
+      font-weight: 700;
+      color: #111;
+      font-size: 13px;
+    }
+
+    /* ── Tables ── */
+    table.line-items,
+    table.summary,
+    table.scope {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 28px;
+    }
+
+    /* Line items */
+    table.line-items thead tr {
+      background: #1a1a1a;
+      color: #fff;
+    }
+
+    table.line-items thead th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+    }
+
+    table.line-items thead th:nth-child(2),
+    table.line-items thead th:nth-child(3),
+    table.line-items thead th:nth-child(4) {
+      text-align: right;
+    }
+
+    table.line-items tbody tr {
+      border-bottom: 1px solid #ebebeb;
+    }
+
+    table.line-items tbody tr:last-child {
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    table.line-items tbody td {
+      padding: 12px 14px;
+      vertical-align: top;
+      font-size: 12.5px;
+      color: #333;
+    }
+
+    table.line-items tbody td:nth-child(2),
+    table.line-items tbody td:nth-child(3),
+    table.line-items tbody td:nth-child(4) {
+      text-align: right;
+    }
+
+    .discount-row td {
+      color: #c0392b !important;
+    }
+
+    /* Summary table */
+    table.summary {
+      width: 340px;
+      margin-left: auto;
+      margin-bottom: 32px;
+    }
+
+    table.summary td {
+      padding: 7px 14px;
+      font-size: 12.5px;
+      color: #444;
+    }
+
+    table.summary td:first-child {
+      text-align: right;
+      color: #666;
+    }
+
+    table.summary td:last-child {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      min-width: 80px;
+    }
+
+    table.summary tr.discount td { color: #c0392b; }
+
+    table.summary tr.total {
+      background: #1a1a1a;
+      color: #fff;
+    }
+
+    table.summary tr.total td {
+      color: #fff !important;
+      font-weight: 700;
+      font-size: 13.5px;
+      padding: 10px 14px;
+    }
+
+    /* Scope table */
+    .scope-heading {
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 10px;
+      color: #111;
+    }
+
+    table.scope thead tr {
+      background: #f5f5f5;
+      border-bottom: 2px solid #ddd;
+    }
+
+    table.scope thead th {
+      padding: 9px 14px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    table.scope thead th:last-child { text-align: right; }
+
+    table.scope tbody tr {
+      border-bottom: 1px solid #ebebeb;
+    }
+
+    table.scope tbody td {
+      padding: 11px 14px;
+      font-size: 12px;
+      color: #444;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    table.scope tbody td:last-child {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      font-weight: 600;
+      color: #111;
+    }
+
+    /* ── Notes ── */
+    .notes {
+      background: #f9f9f9;
+      border-left: 3px solid #1a1a1a;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #555;
+      margin-top: 8px;
+    }
+
+    .notes strong { color: #111; }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 44px;
+      text-align: center;
+      font-size: 11px;
+      color: #aaa;
+      letter-spacing: 0.5px;
+    }
+
+    /* Print */
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { box-shadow: none; padding: 32px 40px; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Print button (hidden on print) -->
+  <div class="no-print" style="max-width:780px;margin:0 auto 16px;text-align:right;">
+    <button onclick="window.print()"
+      style="background:#1a1a1a;color:#fff;border:none;padding:10px 22px;font-size:12px;
+             font-family:inherit;font-weight:600;letter-spacing:0.5px;cursor:pointer;
+             text-transform:uppercase;">
+      ⬇ Print / Save PDF
+    </button>
+  </div>
+
+  <div class="page">
+
+    <!-- ── Header ── -->
+    <div class="header">
+      <div class="from-block">
+        <h2>MP Financial Enterprises</h2>
+        <p>
+          Attn: Mike Polynice, President<br />
+          [Business Address]<br />
+          [City, State ZIP]<br />
+          [Phone] | [Email]
+        </p>
+      </div>
+      <div class="invoice-meta">
+        <div class="invoice-title">Invoice</div>
+        <table>
+          <tr>
+            <td>Invoice #:</td>
+            <td>MPFE-2026-0105-001</td>
+          </tr>
+          <tr>
+            <td>Invoice Date:</td>
+            <td>January 05, 2026</td>
+          </tr>
+          <tr>
+            <td>Due Date:</td>
+            <td>Due upon receipt</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ── Bill To ── -->
+    <div class="bill-to">
+      <p><span class="label">Bill To:</span> Sonny</p>
+      <p>[Company / Address]</p>
+      <p>[City, State ZIP]</p>
+    </div>
+
+    <!-- ── Line Items ── -->
+    <table class="line-items">
+      <thead>
+        <tr>
+          <th style="width:55%">Description</th>
+          <th style="width:10%">Qty</th>
+          <th style="width:17.5%">Rate</th>
+          <th style="width:17.5%">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Website + technical enablement package<br />
+            <span style="font-size:11.5px;color:#888;">(original price)</span>
+          </td>
+          <td>1</td>
+          <td>$1,200.00</td>
+          <td>$1,200.00</td>
+        </tr>
+        <tr class="discount-row">
+          <td>Discount (20% off original $1,200.00)</td>
+          <td>1</td>
+          <td>−$240.00</td>
+          <td>−$240.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ── Summary ── -->
+    <table class="summary">
+      <tr>
+        <td>Original Price</td>
+        <td>$1,200.00</td>
+      </tr>
+      <tr class="discount">
+        <td>Discount (20%)</td>
+        <td>−$240.00</td>
+      </tr>
+      <tr>
+        <td>Tax</td>
+        <td>$0.00</td>
+      </tr>
+      <tr class="total">
+        <td>Total Due</td>
+        <td>$960.00</td>
+      </tr>
+    </table>
+
+    <!-- ── Scope Allocation ── -->
+    <p class="scope-heading">Included Deliverables (Scope Allocation Summary):</p>
+    <table class="scope">
+      <thead>
+        <tr>
+          <th style="width:75%">Scope / Deliverable</th>
+          <th>Allocation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Website creation (design, development, deployment)</td>
+          <td>$750.00</td>
+        </tr>
+        <tr>
+          <td>
+            Web marketing materials; site security; images; and technical
+            deliverables including JavaScript Object Notation (JSON), n8n
+            (workflow automation platform), Extensible Markup Language (XML),
+            and Structured Query Language (SQL).
+          </td>
+          <td>$250.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ── Notes ── -->
+    <div class="notes">
+      <strong>Notes:</strong> No tax applied. All amounts in USD.
+      Please remit payment to MP Financial Enterprises.
+    </div>
+
+    <!-- ── Footer ── -->
+    <div class="footer">
+      Thank you for your business — MP Financial Enterprises
+    </div>
+
+  </div>
+
+</body>
+</html>
