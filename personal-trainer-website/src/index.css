@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-brand-black text-brand-text font-sans;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .section-heading {
+    @apply text-4xl md:text-5xl font-display font-bold uppercase tracking-wider;
+  }
+
+  .gold-line {
+    @apply block w-16 h-1 bg-brand-gold mt-3 mb-6;
+  }
+
+  .btn-primary {
+    @apply bg-brand-gold text-brand-black font-display font-bold uppercase tracking-widest px-8 py-4 text-sm
+           hover:bg-brand-gold-light transition-all duration-300 inline-block cursor-pointer
+           border-2 border-brand-gold hover:border-brand-gold-light;
+  }
+
+  .btn-outline {
+    @apply border-2 border-brand-gold text-brand-gold font-display font-bold uppercase tracking-widest px-8 py-4 text-sm
+           hover:bg-brand-gold hover:text-brand-black transition-all duration-300 inline-block cursor-pointer;
+  }
+
+  .card-dark {
+    @apply bg-brand-gray border border-brand-gray-mid p-6 md:p-8;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #111;
+}
+::-webkit-scrollbar-thumb {
+  background: #C9A84C;
+  border-radius: 3px;
+}
+
+/* Intersection observer animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
