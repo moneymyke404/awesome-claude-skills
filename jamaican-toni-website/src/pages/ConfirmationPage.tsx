@@ -1,124 +1,182 @@
-import { useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { CheckCircle2, ArrowRight, Package, Truck, Mail, Copy, Check } from 'lucide-react';
+import { products } from '../data/products';
 
 interface ConfirmationPageProps {
   onNavigate: (page: string) => void;
+  cartProduct?: string;
 }
 
-const orderNumber = `JT${Math.floor(Math.random() * 9000 + 1000)}`;
+const orderNumber = `JT-${Date.now().toString(36).toUpperCase().slice(-6)}`;
 
-export default function ConfirmationPage({ onNavigate }: ConfirmationPageProps) {
+export default function ConfirmationPage({ onNavigate, cartProduct }: ConfirmationPageProps) {
+  const product = products.find(p => p.id === cartProduct) ?? products[0];
   const [joined, setJoined] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.05 }
+    );
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(orderNumber);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#EAE0CC' }}>
+    <div className="min-h-screen bg-jt-cream bg-noise">
 
-      {/* Top section — light */}
-      <div className="bg-jt-cream py-12 text-center border-b border-jt-stone/30">
-        {/* Logo */}
-        <button onClick={() => onNavigate('home')} className="font-display text-2xl font-bold tracking-wider text-jt-text">
-          Jamaican Toni
-        </button>
-        {/* Monogram */}
-        <div className="flex justify-center mt-4 mb-6">
-          <div className="w-14 h-14 rounded-full border-2 border-jt-gold/50 flex items-center justify-center">
-            <span className="font-display text-xl font-bold text-jt-gold">JT</span>
+      {/* ── HEADER ── */}
+      <div className="border-b border-jt-stone/15 py-6">
+        <div className="max-w-5xl mx-auto px-5 flex items-center justify-between">
+          <button onClick={() => onNavigate('home')} className="font-display text-xl font-semibold tracking-[0.12em] text-jt-text">
+            JAMAICAN TONI
+          </button>
+          <div className="flex items-center gap-2 text-[10px] font-sans text-jt-muted">
+            <Package size={12} />
+            <span className="uppercase tracking-widest">Order Confirmed</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── MAIN CONTENT ── */}
+      <div className="max-w-3xl mx-auto px-5 py-14 lg:py-20">
+
+        {/* Success Icon + Headline */}
+        <div className="text-center mb-14 animate-fade-up">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full border border-jt-teal/30 mb-6">
+            <CheckCircle2 size={32} className="text-jt-teal" strokeWidth={1.2} />
+          </div>
+          <p className="eyebrow mb-3">Thank You</p>
+          <h1 className="font-display text-display-md font-semibold text-jt-text leading-tight mb-3">
+            Your Order Is <span className="italic font-serif font-normal">Confirmed</span>
+          </h1>
+          <p className="font-serif italic text-jt-muted text-base max-w-md mx-auto">
+            Your piece is being prepared with care. A confirmation has been sent to your email.
+          </p>
+        </div>
+
+        {/* Order Number Card */}
+        <div className="border border-jt-stone/15 p-8 mb-10 text-center reveal">
+          <p className="text-[10px] font-sans uppercase tracking-[0.3em] text-jt-muted mb-3">Order Number</p>
+          <div className="flex items-center justify-center gap-3">
+            <span className="font-display text-2xl font-semibold tracking-[0.15em] text-jt-text">{orderNumber}</span>
+            <button
+              onClick={handleCopy}
+              className="text-jt-muted hover:text-jt-text transition-colors"
+              aria-label="Copy order number"
+            >
+              {copied ? <Check size={16} className="text-jt-teal" /> : <Copy size={16} />}
+            </button>
           </div>
         </div>
 
-        <h1 className="font-display text-4xl md:text-5xl font-bold text-jt-text mb-3">
-          Alignment Confirmed.
-        </h1>
-        <p className="font-serif italic text-jt-muted text-base">
-          Your piece is being prepared with intention.
-        </p>
-      </div>
-
-      {/* Middle section — dark marble */}
-      <div
-        className="flex-1 relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, #3D2A18 0%, #2C1A0E 40%, #1B1008 100%)',
-          backgroundImage: `
-            linear-gradient(135deg, #3D2A18 0%, #2C1A0E 40%, #1B1008 100%),
-            url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23C9963A' fill-opacity='0.05'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z'/%3E%3C/g%3E%3C/svg%3E")
-          `,
-        }}
-      >
-        {/* Gold glow */}
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{ background: 'radial-gradient(ellipse at 50% 30%, #C9963A 0%, transparent 60%)' }}
-        />
-
-        <div className="relative py-16 px-6 max-w-2xl mx-auto text-center">
-          {/* Order details */}
-          <div className="border-y border-jt-gold/20 py-10 mb-10">
-            <p className="font-serif italic text-jt-stone/70 text-lg mb-2">
-              Thank you for your order, valued client.
-            </p>
-            <p className="font-sans text-jt-stone/50 text-sm mb-4">
-              A receipt has been sent to your email address.
-            </p>
-            <div className="inline-block border border-jt-gold/30 bg-jt-gold/5 px-6 py-2">
-              <span className="font-display text-jt-gold text-lg font-bold tracking-widest">
-                Order #{orderNumber}
+        {/* Order Details */}
+        <div className="border border-jt-stone/15 divide-y divide-jt-stone/15 mb-10 reveal">
+          {/* Product */}
+          <div className="p-6 flex gap-4">
+            <div className={`w-[72px] aspect-[3/4] ${product.heroBg} relative flex-shrink-0 overflow-hidden`}>
+              <div className="absolute inset-0 bg-noise" />
+              <span className="absolute inset-0 flex items-center justify-center font-display text-xl font-bold text-white/15 select-none">
+                {product.name.split(' ').map(w => w[0]).join('')}
               </span>
+            </div>
+            <div className="flex-1 flex justify-between">
+              <div>
+                <p className="font-sans text-sm font-medium text-jt-text leading-tight">{product.name}</p>
+                <p className="font-sans text-xs text-jt-muted mt-1">Size M · {product.colors[0]}</p>
+                <p className="font-sans text-xs text-jt-muted mt-0.5">Qty: 1</p>
+              </div>
+              <p className="font-sans text-sm text-jt-text">${product.price}</p>
             </div>
           </div>
 
-          {/* Join the Circle */}
-          <div>
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-jt-cream uppercase leading-tight mb-4">
-              Join The <span className="text-jt-gold">Alignment Circle</span>
+          {/* Totals */}
+          <div className="p-6 space-y-2.5 text-sm font-sans">
+            <div className="flex justify-between text-jt-text/60"><span>Subtotal</span><span>${product.price}</span></div>
+            <div className="flex justify-between text-jt-text/60"><span>Shipping</span><span className="text-jt-teal">Complimentary</span></div>
+            <div className="flex justify-between font-semibold text-jt-text text-base pt-3 border-t border-jt-stone/15">
+              <span>Total</span><span>${product.price} USD</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Timeline */}
+        <div className="border border-jt-stone/15 p-6 mb-10 reveal">
+          <p className="text-[10px] font-sans uppercase tracking-[0.3em] text-jt-muted mb-6">What Happens Next</p>
+          <div className="space-y-0">
+            {[
+              { icon: Mail, title: 'Confirmation Email Sent', desc: 'Check your inbox for order details and receipt.', done: true },
+              { icon: Package, title: 'Preparing Your Order', desc: 'Your piece is being carefully packaged in JT signature packaging.', done: false },
+              { icon: Truck, title: 'Shipping & Delivery', desc: 'Estimated delivery in 3–5 business days. Tracking link will follow.', done: false },
+            ].map(({ icon: Icon, title, desc, done }, i) => (
+              <div key={title} className="flex gap-4">
+                <div className="flex flex-col items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                    done ? 'bg-jt-charcoal' : 'border border-jt-stone/25'
+                  }`}>
+                    <Icon size={14} className={done ? 'text-jt-cream' : 'text-jt-muted'} strokeWidth={1.5} />
+                  </div>
+                  {i < 2 && <div className="w-px h-8 bg-jt-stone/15" />}
+                </div>
+                <div className="pb-6">
+                  <p className="font-sans text-sm font-medium text-jt-text">{title}</p>
+                  <p className="font-sans text-xs text-jt-muted mt-0.5">{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Join The Circle CTA */}
+        <div className="bg-jt-charcoal relative overflow-hidden p-10 lg:p-14 text-center mb-10 reveal">
+          <div className="absolute inset-0 bg-noise opacity-30" />
+          <div className="relative">
+            <p className="text-[10px] font-sans uppercase tracking-[0.4em] text-jt-gold mb-4">Exclusive Access</p>
+            <h2 className="font-display text-2xl lg:text-3xl font-semibold text-jt-cream leading-tight mb-3">
+              Join The <span className="italic font-serif font-normal text-jt-gold">Circle</span>
             </h2>
-            <p className="font-sans text-jt-stone/60 text-sm leading-relaxed mb-8 max-w-md mx-auto">
-              Connect with aligned leaders worldwide. Gain access to exclusive insights,
-              early drops, and future releases before anyone else.
+            <p className="font-sans text-sm text-jt-cream/50 max-w-md mx-auto mb-8 leading-relaxed">
+              Get early access to new drops, exclusive editorials, and invitations to JT events. First access. No restock alerts — just first dibs.
             </p>
 
             {joined ? (
-              <div className="inline-block border border-jt-gold/50 bg-jt-gold/10 px-8 py-4 text-jt-gold font-sans text-sm">
-                ✦ Welcome to the Circle.
+              <div className="inline-flex items-center gap-2 text-jt-gold text-sm font-sans">
+                <CheckCircle2 size={16} />
+                <span>Welcome to the Circle.</span>
               </div>
             ) : (
               <button
                 onClick={() => setJoined(true)}
-                className="inline-flex items-center gap-3 bg-jt-forest border border-jt-gold/30 text-jt-cream font-sans font-semibold uppercase tracking-widest text-xs px-10 py-5 hover:bg-jt-forest-lt hover:border-jt-gold transition-all duration-300"
+                className="btn-inverse"
               >
-                Join Now <ArrowRight size={14} />
+                <span>Join Now</span><ArrowRight size={13} />
               </button>
             )}
           </div>
         </div>
 
-        {/* Section divider */}
-        <div className="border-t border-jt-gold/15 py-10 text-center">
-          <div className="flex items-center justify-center gap-6 max-w-lg mx-auto px-6">
-            <div className="h-px flex-1 bg-jt-gold/20" />
-            <span className="font-display text-jt-stone/30 text-xs uppercase tracking-widest whitespace-nowrap">
-              Jamaican Toni
-            </span>
-            <div className="h-px flex-1 bg-jt-gold/20" />
-          </div>
-          <p className="font-serif italic text-jt-stone/30 text-xs mt-4">Powered by Island Love</p>
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-14 reveal">
+          <button onClick={() => onNavigate('collection')} className="btn-primary flex-1 py-5">
+            <span>Continue Shopping</span><ArrowRight size={14} />
+          </button>
+          <button onClick={() => onNavigate('home')} className="btn-secondary flex-1 py-5">
+            <span>Return Home</span>
+          </button>
         </div>
 
-        {/* Footer links */}
-        <div className="border-t border-jt-gold/10 py-8 text-center">
-          <div className="flex items-center justify-center gap-6 flex-wrap">
-            {['Home', 'Collection', 'Journal', 'Contact'].map((item, i) => (
-              <span key={item} className="flex items-center gap-6">
-                {i > 0 && <span className="text-jt-stone/20 text-xs">|</span>}
-                <button
-                  onClick={() => onNavigate(item.toLowerCase())}
-                  className="text-[10px] font-sans uppercase tracking-widest text-jt-stone/30 hover:text-jt-gold transition-colors"
-                >
-                  {item}
-                </button>
-              </span>
-            ))}
-          </div>
+        {/* Footer divider */}
+        <div className="flex items-center gap-6 reveal">
+          <div className="h-px flex-1 bg-jt-stone/15" />
+          <span className="text-[9px] font-sans uppercase tracking-[0.4em] text-jt-muted/40">Jamaican Toni</span>
+          <div className="h-px flex-1 bg-jt-stone/15" />
         </div>
       </div>
     </div>

@@ -13,12 +13,14 @@ type Page = 'home' | 'collection' | 'product' | 'checkout' | 'confirmation'
 function StubPage({ title, onNavigate }: { title: string; onNavigate: (p: string) => void }) {
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-6 py-24">
-      <p className="section-eyebrow mb-4">Coming Soon</p>
-      <h1 className="font-display text-4xl font-bold text-jt-text uppercase tracking-wide mb-4">{title}</h1>
+      <p className="eyebrow mb-4">Coming Soon</p>
+      <h1 className="font-display text-4xl font-semibold text-jt-text tracking-wide mb-4">{title}</h1>
       <p className="font-serif italic text-jt-muted mb-8 max-w-sm">
         This page is being crafted with the same intention as every Jamaican Toni piece.
       </p>
-      <button onClick={() => onNavigate('home')} className="btn-dark">Back to Home</button>
+      <button onClick={() => onNavigate('home')} className="btn-primary">
+        <span>Back to Home</span>
+      </button>
     </div>
   );
 }
@@ -51,7 +53,7 @@ export default function App() {
       {page === 'collection'   && <CollectionPage onNavigate={navigate} />}
       {page === 'product'      && <ProductPage productId={productId} onNavigate={navigate} onAddToCart={addToCart} />}
       {page === 'checkout'     && <CheckoutPage onNavigate={navigate} cartProduct={cartProductId} />}
-      {page === 'confirmation' && <ConfirmationPage onNavigate={navigate} />}
+      {page === 'confirmation' && <ConfirmationPage onNavigate={navigate} cartProduct={cartProductId} />}
       {page === 'philosophy'   && <StubPage title="Our Philosophy" onNavigate={navigate} />}
       {page === 'journal'      && <StubPage title="The Journal" onNavigate={navigate} />}
       {page === 'circle'       && <StubPage title="The Alignment Circle" onNavigate={navigate} />}

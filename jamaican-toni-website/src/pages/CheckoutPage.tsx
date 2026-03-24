@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Lock, ChevronRight } from 'lucide-react';
+import { Lock, ChevronRight, ArrowRight, ShieldCheck } from 'lucide-react';
 import { products } from '../data/products';
 
 interface CheckoutPageProps {
@@ -9,23 +9,11 @@ interface CheckoutPageProps {
 
 const steps = ['Information', 'Shipping', 'Payment'];
 
-const US_STATES = [
-  'Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut',
-  'Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa',
-  'Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan',
-  'Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire',
-  'New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio',
-  'Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota',
-  'Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia',
-  'Wisconsin','Wyoming',
-];
-
 export default function CheckoutPage({ onNavigate, cartProduct }: CheckoutPageProps) {
   const product = products.find(p => p.id === cartProduct) ?? products[0];
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
-    email: '', firstName: '', lastName: '',
-    address: '', apt: '', city: '', state: '', zip: '',
+    email: '', firstName: '', lastName: '', address: '', apt: '', city: '', state: '', zip: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -34,51 +22,41 @@ export default function CheckoutPage({ onNavigate, cartProduct }: CheckoutPagePr
 
   const handleContinue = (e: React.FormEvent) => {
     e.preventDefault();
-    if (step < steps.length - 1) { setStep(s => s + 1); }
-    else { onNavigate('confirmation'); }
+    if (step < steps.length - 1) setStep(s => s + 1);
+    else onNavigate('confirmation');
   };
 
   return (
-    <div className="min-h-screen bg-jt-cream-dk" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'200\' height=\'200\' viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect width=\'200\' height=\'200\' fill=\'%23EAE0CC\'/%3E%3C/svg%3E")' }}>
-      {/* Header */}
-      <div className="bg-jt-cream border-b border-jt-stone/20 py-6 text-center">
-        <button onClick={() => onNavigate('home')} className="font-display text-2xl font-bold tracking-wider text-jt-text">
-          Jamaican Toni
-        </button>
-        <div className="text-[9px] font-sans uppercase tracking-[0.4em] text-jt-gold mt-1">Atlanta · Est. 2024</div>
-        {/* Gold monogram */}
-        <div className="flex justify-center mt-3">
-          <div className="w-8 h-8 rounded-full border border-jt-gold/40 flex items-center justify-center">
-            <span className="font-display text-xs font-bold text-jt-gold">JT</span>
+    <div className="min-h-screen bg-jt-cream bg-noise">
+
+      {/* ── HEADER — Clean, minimal (Net-a-Porter checkout) ── */}
+      <div className="border-b border-jt-stone/15 py-6">
+        <div className="max-w-5xl mx-auto px-5 flex items-center justify-between">
+          <button onClick={() => onNavigate('home')} className="font-display text-xl font-semibold tracking-[0.12em] text-jt-text">
+            JAMAICAN TONI
+          </button>
+          <div className="flex items-center gap-2 text-[10px] font-sans text-jt-muted">
+            <Lock size={12} />
+            <span className="uppercase tracking-widest">Secure Checkout</span>
           </div>
         </div>
       </div>
 
-      {/* Page title */}
-      <div className="text-center py-10 px-4">
-        <h1 className="font-display text-3xl md:text-4xl font-bold text-jt-text">
-          Complete Your Alignment
-        </h1>
-        <p className="font-serif italic text-jt-muted mt-2 text-sm">
-          This limited release will not restock.
-        </p>
-      </div>
+      {/* ── MAIN ── */}
+      <div className="max-w-5xl mx-auto px-5 py-10 lg:py-14 grid lg:grid-cols-[1fr_380px] gap-10 lg:gap-14">
 
-      {/* Main grid */}
-      <div className="max-w-5xl mx-auto px-4 pb-24 grid lg:grid-cols-[1fr_380px] gap-8">
-
-        {/* Left: Form */}
+        {/* LEFT: Form */}
         <div>
-          {/* Step progress */}
-          <div className="bg-jt-cream border border-jt-stone/20 px-6 py-4 flex items-center gap-4 mb-6">
+          {/* Steps */}
+          <div className="flex items-center gap-0 mb-10">
             {steps.map((s, i) => (
-              <div key={s} className="flex items-center gap-3">
-                {i > 0 && <div className="h-px w-8 bg-jt-stone/30" />}
+              <div key={s} className="flex items-center">
+                {i > 0 && <div className="w-10 h-px bg-jt-stone/25 mx-2" />}
                 <button
                   onClick={() => i < step && setStep(i)}
-                  className={`text-[11px] font-sans uppercase tracking-widest transition-colors ${
-                    i === step ? 'text-jt-text font-semibold border-b border-jt-charcoal' :
-                    i < step ? 'text-jt-gold cursor-pointer' : 'text-jt-muted/50'
+                  className={`text-[11px] font-sans uppercase tracking-[0.2em] transition-colors pb-1 ${
+                    i === step ? 'text-jt-text border-b border-jt-charcoal' :
+                    i < step ? 'text-jt-gold cursor-pointer' : 'text-jt-muted/40'
                   }`}
                 >
                   {s}
@@ -87,186 +65,146 @@ export default function CheckoutPage({ onNavigate, cartProduct }: CheckoutPagePr
             ))}
           </div>
 
-          <form onSubmit={handleContinue}>
-            <div className="bg-jt-cream border border-jt-stone/20 p-6 md:p-8 space-y-5">
-
-              {step === 0 && (
-                <>
+          <form onSubmit={handleContinue} className="space-y-6">
+            {step === 0 && (
+              <>
+                <div>
+                  <label className="text-[10px] font-sans uppercase tracking-[0.25em] text-jt-muted block mb-2">Email</label>
+                  <input name="email" type="email" required value={form.email} onChange={handleChange} placeholder="your@email.com" className="input-boxed" />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-[10px] font-sans uppercase tracking-widest text-jt-muted block mb-2">
-                      Email Address
-                    </label>
-                    <input name="email" type="email" required value={form.email}
-                      onChange={handleChange} placeholder="Email Address"
-                      className="jt-input" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-[10px] font-sans uppercase tracking-widest text-jt-muted block mb-2">First Name</label>
-                      <input name="firstName" required value={form.firstName}
-                        onChange={handleChange} placeholder="First Name" className="jt-input" />
-                    </div>
-                    <div>
-                      <label className="text-[10px] font-sans uppercase tracking-widest text-jt-muted block mb-2">Last Name</label>
-                      <input name="lastName" required value={form.lastName}
-                        onChange={handleChange} placeholder="Last Name" className="jt-input" />
-                    </div>
+                    <label className="text-[10px] font-sans uppercase tracking-[0.25em] text-jt-muted block mb-2">First Name</label>
+                    <input name="firstName" required value={form.firstName} onChange={handleChange} placeholder="First Name" className="input-boxed" />
                   </div>
                   <div>
-                    <label className="text-[10px] font-sans uppercase tracking-widest text-jt-muted block mb-2">Address</label>
-                    <input name="address" required value={form.address}
-                      onChange={handleChange} placeholder="Address" className="jt-input" />
+                    <label className="text-[10px] font-sans uppercase tracking-[0.25em] text-jt-muted block mb-2">Last Name</label>
+                    <input name="lastName" required value={form.lastName} onChange={handleChange} placeholder="Last Name" className="input-boxed" />
                   </div>
-                  <input name="apt" value={form.apt}
-                    onChange={handleChange} placeholder="Apartment, suite, etc. (optional)"
-                    className="jt-input" />
+                </div>
+                <div>
+                  <label className="text-[10px] font-sans uppercase tracking-[0.25em] text-jt-muted block mb-2">Address</label>
+                  <input name="address" required value={form.address} onChange={handleChange} placeholder="Street Address" className="input-boxed" />
+                </div>
+                <input name="apt" value={form.apt} onChange={handleChange} placeholder="Apt, suite, etc. (optional)" className="input-boxed" />
+                <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <label className="text-[10px] font-sans uppercase tracking-widest text-jt-muted block mb-2">City</label>
-                    <input name="city" required value={form.city}
-                      onChange={handleChange} placeholder="City" className="jt-input" />
+                    <label className="text-[10px] font-sans uppercase tracking-[0.25em] text-jt-muted block mb-2">City</label>
+                    <input name="city" required value={form.city} onChange={handleChange} placeholder="City" className="input-boxed" />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <select name="state" required value={form.state}
-                      onChange={handleChange} className="jt-input appearance-none cursor-pointer">
-                      <option value="">State / Province</option>
-                      {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                  <div>
+                    <label className="text-[10px] font-sans uppercase tracking-[0.25em] text-jt-muted block mb-2">State</label>
+                    <select name="state" required value={form.state} onChange={handleChange} className="input-boxed appearance-none cursor-pointer">
+                      <option value="">Select</option>
+                      <option value="GA">Georgia</option>
+                      <option value="FL">Florida</option>
+                      <option value="NY">New York</option>
+                      <option value="CA">California</option>
+                      <option value="TX">Texas</option>
                     </select>
-                    <input name="zip" required value={form.zip}
-                      onChange={handleChange} placeholder="ZIP Code" className="jt-input" />
                   </div>
-                </>
-              )}
+                  <div>
+                    <label className="text-[10px] font-sans uppercase tracking-[0.25em] text-jt-muted block mb-2">ZIP</label>
+                    <input name="zip" required value={form.zip} onChange={handleChange} placeholder="30301" className="input-boxed" />
+                  </div>
+                </div>
+              </>
+            )}
 
-              {step === 1 && (
-                <div className="py-4 space-y-4">
-                  <p className="section-eyebrow">Shipping Method</p>
-                  {[
-                    { label: 'Standard (3–5 Business Days)', price: 'Free', selected: true },
-                    { label: 'Express (1–2 Business Days)', price: '$18' },
-                    { label: 'Overnight', price: '$35' },
-                  ].map(({ label, price, selected }) => (
-                    <label key={label} className={`flex items-center justify-between p-4 border cursor-pointer transition-all ${
-                      selected ? 'border-jt-charcoal bg-jt-charcoal/5' : 'border-jt-stone/30 hover:border-jt-charcoal/40'
-                    }`}>
-                      <div className="flex items-center gap-3">
-                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                          selected ? 'border-jt-charcoal' : 'border-jt-stone/40'
-                        }`}>
-                          {selected && <div className="w-2 h-2 rounded-full bg-jt-charcoal" />}
-                        </div>
-                        <span className="font-sans text-sm text-jt-text">{label}</span>
+            {step === 1 && (
+              <div className="space-y-3">
+                <p className="text-[10px] font-sans uppercase tracking-[0.25em] text-jt-muted mb-4">Shipping Method</p>
+                {[
+                  { label: 'Standard (3–5 days)', price: 'Complimentary', active: true },
+                  { label: 'Express (1–2 days)', price: '$18' },
+                  { label: 'Overnight', price: '$35' },
+                ].map(({ label, price, active }) => (
+                  <label key={label} className={`flex items-center justify-between p-5 border cursor-pointer transition-all duration-300 ${
+                    active ? 'border-jt-charcoal' : 'border-jt-stone/20 hover:border-jt-charcoal/30'
+                  }`}>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${active ? 'border-jt-charcoal' : 'border-jt-stone/30'}`}>
+                        {active && <div className="w-2 h-2 rounded-full bg-jt-charcoal" />}
                       </div>
-                      <span className="font-sans text-sm font-semibold text-jt-text">{price}</span>
-                    </label>
-                  ))}
+                      <span className="font-sans text-sm text-jt-text">{label}</span>
+                    </div>
+                    <span className={`font-sans text-sm ${active ? 'text-jt-teal font-medium' : 'text-jt-text'}`}>{price}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+
+            {step === 2 && (
+              <div className="space-y-5">
+                <p className="text-[10px] font-sans uppercase tracking-[0.25em] text-jt-muted mb-2">Payment</p>
+                <input placeholder="Card number" className="input-boxed" />
+                <div className="grid grid-cols-2 gap-4">
+                  <input placeholder="MM / YY" className="input-boxed" />
+                  <input placeholder="CVC" className="input-boxed" />
                 </div>
+                <input placeholder="Name on card" className="input-boxed" />
+              </div>
+            )}
+
+            <button type="submit" className="btn-primary w-full py-5 mt-2">
+              {step < steps.length - 1 ? (
+                <><span>Continue</span><ChevronRight size={14} /></>
+              ) : (
+                <><Lock size={13} /><span>Complete Order</span></>
               )}
-
-              {step === 2 && (
-                <div className="space-y-4">
-                  <p className="section-eyebrow">Payment Details</p>
-                  <input placeholder="Card Number" className="jt-input" />
-                  <div className="grid grid-cols-2 gap-4">
-                    <input placeholder="Expiry (MM/YY)" className="jt-input" />
-                    <input placeholder="CVV" className="jt-input" />
-                  </div>
-                  <input placeholder="Name on Card" className="jt-input" />
-                </div>
-              )}
-
-              <button type="submit" className="btn-gold w-full py-5 text-center flex items-center justify-center gap-2 mt-2">
-                {step < steps.length - 1 ? (
-                  <><span>Continue</span><ChevronRight size={15} /></>
-                ) : (
-                  <><Lock size={14} /><span>Complete Alignment</span></>
-                )}
-              </button>
-            </div>
-
-            {/* Payment icons */}
-            <div className="flex items-center justify-center gap-3 mt-4 flex-wrap">
-              {['VISA', 'MC', 'AMEX', 'GPAY', 'APPLE'].map(card => (
-                <div key={card} className="px-2.5 py-1 border border-jt-stone/30 bg-white text-[9px] font-sans text-jt-muted tracking-wider">
-                  {card}
-                </div>
-              ))}
-            </div>
+            </button>
           </form>
+
+          <div className="flex items-center justify-center gap-4 mt-5 flex-wrap">
+            {['VISA', 'MASTERCARD', 'AMEX', 'APPLE PAY', 'GPAY'].map(c => (
+              <span key={c} className="text-[9px] font-sans uppercase tracking-widest text-jt-muted/40">{c}</span>
+            ))}
+          </div>
         </div>
 
-        {/* Right: Order summary */}
+        {/* RIGHT: Order Summary */}
         <div>
-          <div className="bg-jt-cream border border-jt-stone/20 p-6 sticky top-6">
-            <p className="text-[10px] font-sans uppercase tracking-[0.3em] text-jt-muted mb-5">Order Summary</p>
+          <div className="border border-jt-stone/15 p-7 sticky top-6 bg-jt-cream">
+            <p className="text-[10px] font-sans uppercase tracking-[0.3em] text-jt-muted mb-6">Order Summary</p>
 
-            {/* Product row */}
-            <div className="flex items-start gap-4 mb-6 pb-6 border-b border-jt-stone/20">
-              <div className={`w-16 h-20 ${product.heroBg} relative flex-shrink-0 overflow-hidden`}>
-                <div className="absolute inset-0 bg-texture-dark" />
-                <span className="absolute inset-0 flex items-center justify-center font-display text-xl font-bold text-white/20 select-none">
+            {/* Product */}
+            <div className="flex gap-4 mb-6 pb-6 border-b border-jt-stone/15">
+              <div className={`w-[72px] aspect-[3/4] ${product.heroBg} relative flex-shrink-0 overflow-hidden`}>
+                <div className="absolute inset-0 bg-noise" />
+                <span className="absolute inset-0 flex items-center justify-center font-display text-xl font-bold text-white/15 select-none">
                   {product.name.split(' ').map(w => w[0]).join('')}
                 </span>
-                {/* Qty badge */}
-                <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-jt-charcoal text-jt-cream text-[9px] font-bold flex items-center justify-center">
-                  1
+                <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-jt-charcoal text-jt-cream text-[9px] font-semibold flex items-center justify-center">1</div>
+              </div>
+              <div className="flex-1 flex justify-between">
+                <div>
+                  <p className="font-sans text-sm font-medium text-jt-text leading-tight">{product.name}</p>
+                  <p className="font-sans text-xs text-jt-muted mt-1">Size M · {product.colors[0]}</p>
                 </div>
+                <p className="font-sans text-sm text-jt-text">${product.price}</p>
               </div>
-              <div className="flex-1">
-                <p className="font-display text-sm font-bold text-jt-text uppercase tracking-wide leading-tight">{product.name}</p>
-                <p className="font-sans text-jt-muted text-xs mt-1">Size M · {product.colors[0]}</p>
-              </div>
-              <p className="font-sans font-semibold text-jt-text text-sm">${product.price}</p>
             </div>
 
             {/* Discount code */}
             <div className="flex gap-2 mb-6">
-              <input
-                type="text"
-                placeholder="Gift card or discount code"
-                className="flex-1 jt-input text-xs"
-              />
-              <button className="btn-outline-dark text-[10px] py-2 px-4 whitespace-nowrap">Apply</button>
+              <input placeholder="Discount code" className="flex-1 input-boxed text-xs py-3" />
+              <button className="btn-secondary text-[10px] py-3 px-5"><span>Apply</span></button>
             </div>
 
             {/* Totals */}
             <div className="space-y-3 text-sm font-sans">
-              <div className="flex justify-between text-jt-muted">
-                <span>Subtotal</span>
-                <span>${product.price}</span>
-              </div>
-              <div className="flex justify-between text-jt-muted">
-                <span>Shipping</span>
-                <span className="text-jt-teal font-medium">Free</span>
-              </div>
-              <div className="flex justify-between text-jt-muted">
-                <span>Tax</span>
-                <span>$0.00</span>
-              </div>
-              <div className="flex justify-between font-bold text-jt-text text-base pt-3 border-t border-jt-stone/30">
-                <span>Total</span>
-                <span>${product.price} USD</span>
+              <div className="flex justify-between text-jt-text/60"><span>Subtotal</span><span>${product.price}</span></div>
+              <div className="flex justify-between text-jt-text/60"><span>Shipping</span><span className="text-jt-teal">Free</span></div>
+              <div className="flex justify-between font-semibold text-jt-text text-base pt-4 border-t border-jt-stone/15">
+                <span>Total</span><span>${product.price} USD</span>
               </div>
             </div>
 
-            {/* Security badge */}
-            <div className="flex items-center justify-center gap-2 mt-6 text-jt-muted/60">
-              <Lock size={12} />
-              <span className="text-[10px] font-sans uppercase tracking-widest">Secured & encrypted checkout</span>
+            <div className="mt-6 pt-5 border-t border-jt-stone/15 flex items-center justify-center gap-2 text-jt-muted/50">
+              <ShieldCheck size={13} />
+              <span className="text-[10px] font-sans uppercase tracking-widest">Secured & encrypted</span>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="border-t border-jt-stone/30 py-6 text-center">
-        <p className="font-display text-jt-text font-bold text-lg tracking-widest uppercase">Jamaican Toni</p>
-        <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-jt-gold mt-1">Powered by Island Love</p>
-        <div className="flex items-center justify-center gap-6 mt-4">
-          {['Privacy', 'Terms', 'Instagram', 'Contact'].map(item => (
-            <span key={item} className="text-[10px] font-sans uppercase tracking-widest text-jt-muted hover:text-jt-gold cursor-pointer transition-colors">
-              {item}
-            </span>
-          ))}
         </div>
       </div>
     </div>

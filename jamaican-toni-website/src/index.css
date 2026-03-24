@@ -2,91 +2,304 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ================================================================
+   JAMAICAN TONI — Award-winning Design System
+   Inspired by Net-a-Porter × Telfar × Build in Amsterdam
+================================================================ */
+
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
 
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    --cursor-x: 50vw;
+    --cursor-y: 50vh;
+  }
 
   body {
     @apply bg-jt-cream text-jt-text font-sans;
     margin: 0; padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    cursor: default;
   }
 
   h1, h2, h3, h4 { @apply font-display; }
 
-  :focus-visible { outline: 2px solid #C9963A; outline-offset: 3px; }
+  ::selection { background: rgba(201,150,58,0.18); color: #1C1208; }
+  :focus-visible { outline: 1.5px solid #C9963A; outline-offset: 4px; }
 
-  ::selection { background: rgba(201,150,58,0.2); }
+  /* Smooth momentum scroll for horizontal containers */
+  .scroll-snap { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+  .scroll-snap > * { scroll-snap-align: start; }
 }
 
 @layer components {
-  /* Buttons */
-  .btn-dark {
-    @apply bg-jt-charcoal text-jt-cream font-sans font-semibold uppercase tracking-[0.18em] text-xs
-           px-8 py-4 border border-jt-charcoal hover:bg-jt-espresso transition-all duration-300
-           inline-block cursor-pointer active:scale-[0.98];
-  }
-  .btn-gold {
-    @apply bg-jt-gold text-jt-cream font-sans font-semibold uppercase tracking-[0.18em] text-xs
-           px-8 py-4 border border-jt-gold hover:bg-jt-gold-lt hover:border-jt-gold-lt
-           transition-all duration-300 inline-block cursor-pointer active:scale-[0.98];
-  }
-  .btn-outline-dark {
-    @apply border border-jt-charcoal text-jt-charcoal font-sans font-semibold uppercase tracking-[0.18em] text-xs
-           px-8 py-4 hover:bg-jt-charcoal hover:text-jt-cream transition-all duration-300
-           inline-block cursor-pointer active:scale-[0.98];
-  }
-  .btn-outline-light {
-    @apply border border-jt-cream text-jt-cream font-sans font-semibold uppercase tracking-[0.18em] text-xs
-           px-8 py-4 hover:bg-jt-cream hover:text-jt-charcoal transition-all duration-300
-           inline-block cursor-pointer active:scale-[0.98];
-  }
-  .btn-outline-gold {
-    @apply border border-jt-gold text-jt-gold font-sans font-semibold uppercase tracking-[0.18em] text-xs
-           px-8 py-4 hover:bg-jt-gold hover:text-jt-cream transition-all duration-300
-           inline-block cursor-pointer active:scale-[0.98];
-  }
 
-  /* Gold separator */
-  .gold-rule {
-    @apply flex items-center gap-4;
+  /* ── BUTTONS (Net-a-Porter minimal + Telfar bold) ── */
+  .btn-primary {
+    @apply relative overflow-hidden bg-jt-charcoal text-jt-cream font-sans font-medium
+           uppercase tracking-[0.22em] text-[11px] leading-none
+           px-10 py-[18px] border border-jt-charcoal
+           transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]
+           inline-flex items-center justify-center gap-2;
   }
-  .gold-rule::before,
-  .gold-rule::after {
+  .btn-primary::after {
     content: '';
-    @apply flex-1 h-px bg-gradient-to-r from-transparent to-jt-gold/40;
+    @apply absolute inset-0 bg-jt-gold translate-y-full;
+    transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
   }
-  .gold-rule::before { @apply bg-gradient-to-l from-transparent to-jt-gold/40; }
+  .btn-primary:hover::after { transform: translateY(0); }
+  .btn-primary:hover { @apply text-jt-charcoal border-jt-gold; }
+  .btn-primary span, .btn-primary svg { @apply relative z-10; }
 
-  /* Section label */
-  .section-eyebrow {
-    @apply text-[10px] font-sans uppercase tracking-[0.35em] text-jt-gold;
+  .btn-secondary {
+    @apply relative overflow-hidden bg-transparent text-jt-charcoal font-sans font-medium
+           uppercase tracking-[0.22em] text-[11px] leading-none
+           px-10 py-[18px] border border-jt-charcoal
+           transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]
+           inline-flex items-center justify-center gap-2;
+  }
+  .btn-secondary::after {
+    content: '';
+    @apply absolute inset-0 bg-jt-charcoal -translate-y-full;
+    transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
+  }
+  .btn-secondary:hover::after { transform: translateY(0); }
+  .btn-secondary:hover { @apply text-jt-cream; }
+  .btn-secondary span, .btn-secondary svg { @apply relative z-10; }
+
+  .btn-ghost {
+    @apply bg-transparent text-jt-charcoal font-sans font-medium uppercase
+           tracking-[0.22em] text-[11px] leading-none px-0 py-2
+           border-b border-jt-charcoal/30 hover:border-jt-gold hover:text-jt-gold
+           transition-all duration-400 inline-flex items-center gap-2;
   }
 
-  /* Form inputs */
-  .jt-input {
-    @apply w-full bg-white/60 border border-jt-stone/60 text-jt-text font-sans text-sm
-           px-4 py-3 focus:outline-none focus:border-jt-gold transition-colors
-           placeholder:text-jt-muted/70;
+  .btn-inverse {
+    @apply relative overflow-hidden bg-jt-cream text-jt-charcoal font-sans font-medium
+           uppercase tracking-[0.22em] text-[11px] leading-none
+           px-10 py-[18px] border border-jt-cream/30
+           transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]
+           inline-flex items-center justify-center gap-2;
+  }
+  .btn-inverse::after {
+    content: '';
+    @apply absolute inset-0 bg-jt-gold translate-y-full;
+    transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
+  }
+  .btn-inverse:hover::after { transform: translateY(0); }
+  .btn-inverse:hover { @apply text-jt-charcoal border-jt-gold; }
+  .btn-inverse span, .btn-inverse svg { @apply relative z-10; }
+
+  /* ── EDITORIAL EYEBROW ── */
+  .eyebrow {
+    @apply text-[10px] font-sans uppercase tracking-[0.4em] text-jt-gold;
+  }
+
+  /* ── FORMS (Net-a-Porter style) ── */
+  .input-luxury {
+    @apply w-full bg-transparent border-0 border-b border-jt-stone/40
+           text-jt-text font-sans text-sm py-3 px-0
+           focus:outline-none focus:border-jt-charcoal
+           transition-all duration-300
+           placeholder:text-jt-muted/50;
+  }
+  .input-luxury:focus { box-shadow: 0 1px 0 0 #1A1A1A; }
+
+  .input-boxed {
+    @apply w-full bg-white border border-jt-stone/30 text-jt-text
+           font-sans text-sm px-5 py-4
+           focus:outline-none focus:border-jt-charcoal
+           transition-all duration-300 placeholder:text-jt-muted/50;
+  }
+
+  /* ── PRODUCT IMAGE HOVER (zoom + slight lift) ── */
+  .product-image {
+    @apply overflow-hidden;
+  }
+  .product-image > * {
+    transition: transform 0.8s cubic-bezier(0.23,1,0.32,1);
+  }
+  .product-image:hover > * {
+    transform: scale(1.06);
+  }
+
+  /* ── EDITORIAL DIVIDER ── */
+  .editorial-rule {
+    @apply h-px bg-gradient-to-r from-transparent via-jt-stone/40 to-transparent;
   }
 }
 
-/* Scroll reveal */
-.reveal { opacity: 0; transform: translateY(24px); transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1); }
-.reveal.visible { opacity: 1; transform: none; }
+/* ================================================================
+   SCROLL-REVEAL SYSTEM (Build in Amsterdam style)
+   Uses cubic-bezier(0.16,1,0.3,1) — the "expo out" easing
+================================================================ */
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #F5EFE4; }
-::-webkit-scrollbar-thumb { background: #C9963A; border-radius: 4px; }
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+    transform 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
 
-/* Gold shimmer utility */
+/* Stagger children — up to 8 */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+    transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal-stagger.visible > *:nth-child(1) { opacity:1; transform:none; transition-delay:0ms }
+.reveal-stagger.visible > *:nth-child(2) { opacity:1; transform:none; transition-delay:80ms }
+.reveal-stagger.visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:160ms }
+.reveal-stagger.visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:240ms }
+.reveal-stagger.visible > *:nth-child(5) { opacity:1; transform:none; transition-delay:320ms }
+.reveal-stagger.visible > *:nth-child(6) { opacity:1; transform:none; transition-delay:400ms }
+.reveal-stagger.visible > *:nth-child(7) { opacity:1; transform:none; transition-delay:480ms }
+.reveal-stagger.visible > *:nth-child(8) { opacity:1; transform:none; transition-delay:560ms }
+
+/* Reveal from left / right */
+.reveal-left  { opacity:0; transform:translateX(-50px); transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+.reveal-right { opacity:0; transform:translateX(50px);  transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+.reveal-left.visible, .reveal-right.visible { opacity:1; transform:none; }
+
+/* Reveal with scale (Build in Amsterdam image reveals) */
+.reveal-scale { opacity:0; transform:scale(0.92); transition: opacity 1s cubic-bezier(.16,1,.3,1), transform 1s cubic-bezier(.16,1,.3,1); }
+.reveal-scale.visible { opacity:1; transform:none; }
+
+/* ================================================================
+   KINETIC TYPOGRAPHY
+================================================================ */
+
+/* Split-line reveal: each line fades up independently */
+.kinetic-line {
+  overflow: hidden;
+}
+.kinetic-line > span {
+  display: inline-block;
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.kinetic-line.visible > span {
+  transform: translateY(0);
+}
+
+/* Character stagger for hero headlines */
+@keyframes charReveal {
+  from { opacity: 0; transform: translateY(100%) rotateX(-80deg); }
+  to   { opacity: 1; transform: translateY(0) rotateX(0); }
+}
+
+/* ================================================================
+   CUSTOM ANIMATIONS
+================================================================ */
+
+@keyframes fadeIn       { from { opacity:0 } to { opacity:1 } }
+@keyframes fadeUp       { from { opacity:0; transform:translateY(30px) } to { opacity:1; transform:none } }
+@keyframes slideUp      { from { transform:translateY(100%) } to { transform:translateY(0) } }
+@keyframes slideDown    { from { transform:translateY(-100%) } to { transform:translateY(0) } }
+@keyframes marquee      { from { transform:translateX(0) } to { transform:translateX(-50%) } }
+@keyframes float        { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-14px) } }
+@keyframes scaleIn      { from { opacity:0; transform:scale(.85) } to { opacity:1; transform:none } }
+@keyframes clipReveal   { from { clip-path:inset(100% 0 0 0) } to { clip-path:inset(0 0 0 0) } }
+@keyframes lineGrow     { from { transform:scaleX(0) } to { transform:scaleX(1) } }
+@keyframes shimmer {
+  0%   { background-position:-200% center }
+  100% { background-position:200% center }
+}
+@keyframes parallaxSlow {
+  from { transform: translateY(0) }
+  to   { transform: translateY(-30px) }
+}
+
+/* Utility classes for animations */
+.animate-fade-in     { animation: fadeIn .8s ease both }
+.animate-fade-up     { animation: fadeUp .8s cubic-bezier(.16,1,.3,1) both }
+.animate-slide-up    { animation: slideUp .7s cubic-bezier(.16,1,.3,1) both }
+.animate-scale-in    { animation: scaleIn .8s cubic-bezier(.16,1,.3,1) both }
+.animate-clip-reveal { animation: clipReveal 1s cubic-bezier(.16,1,.3,1) both }
+.animate-marquee     { animation: marquee 30s linear infinite }
+.animate-float       { animation: float 6s ease-in-out infinite }
+.animate-line-grow   { animation: lineGrow .8s cubic-bezier(.16,1,.3,1) both; transform-origin: left }
+
+/* Delay utilities */
+.delay-100 { animation-delay: 100ms !important; transition-delay: 100ms !important }
+.delay-200 { animation-delay: 200ms !important; transition-delay: 200ms !important }
+.delay-300 { animation-delay: 300ms !important; transition-delay: 300ms !important }
+.delay-400 { animation-delay: 400ms !important; transition-delay: 400ms !important }
+.delay-500 { animation-delay: 500ms !important; transition-delay: 500ms !important }
+.delay-600 { animation-delay: 600ms !important; transition-delay: 600ms !important }
+.delay-700 { animation-delay: 700ms !important; transition-delay: 700ms !important }
+
+/* ================================================================
+   GOLD SHIMMER TEXT
+================================================================ */
 .text-gold-shimmer {
-  background: linear-gradient(90deg, #C9963A 0%, #F0C96A 45%, #C9963A 100%);
+  background: linear-gradient(90deg, #C9963A 0%, #F0C96A 40%, #C9963A 60%, #9A6E20 100%);
   background-size: 200% auto;
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shimmer 2.5s linear infinite;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ================================================================
+   MAGNETIC CURSOR EFFECT (Build in Amsterdam)
+   Applied via data-magnetic attribute — JS handles the movement
+================================================================ */
+[data-magnetic] {
+  transition: transform 0.35s cubic-bezier(0.23,1,0.32,1);
+}
+
+/* ================================================================
+   HORIZONTAL SCROLL SECTION
+================================================================ */
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.horizontal-scroll::-webkit-scrollbar { display: none; }
+.horizontal-scroll > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* ================================================================
+   IMAGE CLIP REVEALS
+================================================================ */
+.clip-from-bottom {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1.2s cubic-bezier(0.16,1,0.3,1);
+}
+.clip-from-bottom.visible {
+  clip-path: inset(0 0 0 0);
+}
+
+/* ================================================================
+   SCROLLBAR (minimal luxury)
+================================================================ */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #C9963A; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #E8BB6A; }
+
+/* ================================================================
+   PARALLAX HELPER
+================================================================ */
+.parallax-container {
+  overflow: hidden;
+}
+.parallax-content {
+  will-change: transform;
 }
