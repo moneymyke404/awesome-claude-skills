@@ -33,8 +33,7 @@
   </p>
 </div>
 
-A curated list of practical Claude Skills for enhancing productivity across Claude.ai, Claude Code, and the Claude API.
-
+A curated list of **100+ practical Claude Skills** for enhancing productivity across Claude.ai, Claude Code, and the Claude API.
 
 > **Want skills that do more than generate text?** Claude can send emails, create issues, post to Slack, and take actions across 1000+ apps. [See how →](./connect/)
 
@@ -65,8 +64,6 @@ exit
 claude
 ```
 
-> **Want skills that do more than generate text?** Claude can send emails, create issues, post to Slack, and take actions across 1000+ apps. [See how →](./connect/)
-
 If you receive the email, Claude is now connected to 500+ apps.
 
 **[See all supported apps →](https://composio.dev/toolkits)**
@@ -75,6 +72,7 @@ If you receive the email, Claude is now connected to 500+ apps.
 
 ## Contents
 
+- [Featured Skills](#featured-skills)
 - [What Are Claude Skills?](#what-are-claude-skills)
 - [Skills](#skills)
   - [Document Processing](#document-processing)
@@ -92,6 +90,21 @@ If you receive the email, Claude is now connected to 500+ apps.
 - [Contributing](#contributing)
 - [Resources](#resources)
 - [License](#license)
+
+## Featured Skills
+
+| Skill | Category | What it does |
+|---|---|---|
+| [Connect](./connect/) | Automation | Send emails, create issues, post to Slack across 1000+ apps |
+| [Changelog Generator](./changelog-generator/) | Dev Tools | Turn git commits into user-friendly release notes |
+| [MCP Builder](./mcp-builder/) | Dev Tools | Build MCP servers to integrate any API with LLMs |
+| [Canvas Design](./canvas-design/) | Creative | Generate beautiful visual art as PNG/PDF |
+| [Tailored Resume Generator](./tailored-resume-generator/) | Productivity | Tailor your resume to any job description automatically |
+| [Meeting Insights Analyzer](./meeting-insights-analyzer/) | Communication | Surface hidden patterns in meeting transcripts |
+| [Lead Research Assistant](./lead-research-assistant/) | Business | Identify and qualify high-quality leads with outreach strategies |
+| [Webapp Testing](./webapp-testing/) | Dev Tools | Test local web UIs with Playwright |
+
+---
 
 ## What Are Claude Skills?
 
@@ -349,7 +362,7 @@ import anthropic
 client = anthropic.Anthropic(api_key="your-api-key")
 
 response = client.messages.create(
-    model="claude-3-5-sonnet-20241022",
+    model="claude-sonnet-4-6",
     skills=["skill-id-here"],
     messages=[{"role": "user", "content": "Your prompt"}]
 )
@@ -439,6 +452,7 @@ We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING
 - [Anthropic Skills Repository](https://github.com/anthropics/skills) - Official example skills
 - [Claude Community](https://community.anthropic.com) - Discuss skills with other users
 - [Skills Marketplace](https://claude.ai/marketplace) - Discover and share skills
+- [AgentsKB](https://agentskb.com) - Researched answers to upgrade your AI's knowledge
 
 ### Inspiration & Use Cases
 
@@ -473,5 +487,3 @@ Individual skills may have different licenses - please check each skill's folder
 ---
 
 **Note**: Claude Skills work across Claude.ai, Claude Code, and the Claude API. Once you create a skill, it's portable across all platforms, making your workflows consistent everywhere you use Claude.
-
-- [AgentsKB](https://agentskb.com) - Upgrade your AI with researched answers. We did the research so your AI gets it right the first time.
